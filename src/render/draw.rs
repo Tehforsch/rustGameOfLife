@@ -21,11 +21,6 @@ pub fn circle(pos: Point, radius: f64, color: Color, context: Context, gl: &mut 
 }
 
 pub fn square(pos: Point, size: f64, color: Color, context: Context, gl: &mut GlGraphics) {
-    let center = context.transform.trans(000.0, 000.0);
-    let square = rectangle::square(0.0, 0.0, 100.0);
-    let red = [1.0, 0.0, 0.0, 1.0];
-     rectangle(color, // red
-          [pos.x, pos.y, pos.x + size, pos.y + size],
-          center.trans(0.0, 0.0),
-          gl);
+    let center = context.transform.trans(pos.x, pos.y);
+    rectangle(color, [0.0, 0.0, size, size], center, gl);
 }

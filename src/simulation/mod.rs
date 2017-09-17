@@ -4,23 +4,26 @@ pub mod cell_state;
 
 use self::cell_state::CellState;
 
-const WIDTH : usize = 40;
-const HEIGHT: usize = 40;
+const WIDTH : usize = 240;
+const HEIGHT: usize = 240;
 
 pub struct Simulation {
-    pub cells: [[CellState; WIDTH]; HEIGHT]
+    pub cells: [[CellState; WIDTH]; HEIGHT],
+    pub old_cells: [[CellState; WIDTH]; HEIGHT]
 }
 
 impl Simulation {
     pub fn timestep(&mut self) {
-        let mut new_cells = [[CellState { is_alive: false }; WIDTH]; HEIGHT];
+        let mut new_cells = self.old_cells;
         for (i, row) in self.cells.iter().enumerate() {
             for (j, cell) in row.iter().enumerate() {
                 let num_neighbors = self.count_neighbors(i, j);
                 new_cells[i][j].is_alive = get_new_state(cell.is_alive, num_neighbors);
             }
         }
+        let swap = self.cells;
         self.cells = new_cells;
+        self.old_cells = swap;
     }
 
     fn count_neighbors(&self, i: usize, j: usize) -> i64 {
@@ -34,15 +37,20 @@ impl Simulation {
     }
 
     pub fn from_random() -> Simulation {
-        let mut sim = Simulation {
-            cells: [[CellState { is_alive: false }; WIDTH]; HEIGHT]
-        };
+        let mut sim = Simulation::new([[CellState { is_alive: false }; WIDTH]; HEIGHT]);
         for (_, row) in sim.cells.iter_mut().enumerate() {
             for (_, cell) in row.iter_mut().enumerate() {
                 cell.is_alive = rand::random::<bool>();
             }
         }
         sim
+    }
+
+    pub fn new(cells: [[CellState; WIDTH]; HEIGHT]) -> Simulation {
+        Simulation {
+            cells: cells,
+            old_cells: cells
+        }
     }
 }
 

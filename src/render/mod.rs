@@ -4,11 +4,10 @@ use opengl_graphics::GlGraphics;
 use piston_window::{self, Context};
 
 use self::draw::square;
-use self::draw::circle;
 use simulation::Simulation;
 use point::Point;
 
-const CELL_DRAW_SIZE: f64 = 20.0;
+const CELL_DRAW_SIZE: f64 = 5.0;
 
 pub fn render(context: Context, gl: &mut GlGraphics, sim: &mut Simulation) {
     piston_window::clear([0.0, 0.0, 0.0, 1.0], gl);
